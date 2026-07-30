@@ -392,7 +392,6 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 
     }
-    }
 
 #if defined(Q_OS_MAC)
     // move user data to new location if on macOS and it still exists in Contents/MacOS
