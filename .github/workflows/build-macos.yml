@@ -1,0 +1,47 @@
+name: Build macOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+
+permissions: read-all
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install Qt5
+        run: |
+          brew update
+          brew install qt@5
+          brew link --force qt@5
+
+      - name: Configure
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="$PWD/install" \
+            -DCMAKE_PREFIX_PATH="$(brew --prefix qt@5)" \
+            -DLauncher_LAYOUT=mac-bundle
+
+      - name: Build
+        run: |
+          cmake --build build -j$(sysctl -n hw.logicalcpu)
+
+      - name: Install
+        run: |
+          cmake --install build --prefix "$PWD/install"
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: MultiMC-macOS
+          path: install/
