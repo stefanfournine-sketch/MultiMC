@@ -126,7 +126,7 @@ public: /* queries */
     }
 
     QString typeString() const {
-        return data.type == "offline" ? "mojang" : "msa";
+        return data.type == "offline" ? "offline" : "msa";
     }
 
     QPixmap getFace() const;
