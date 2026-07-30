@@ -397,6 +397,15 @@ void AccountsDialog::updateStates()
         return;
     }
 
+    if(m_currentAccount->accountState() == AccountState::Offline)
+    {
+        ui->accountPageStack->setCurrentWidget(ui->fullAccountPage);
+        ui->fullAccountPage->setEnabled(accountIsReady);
+        ui->selectedAccountLabel->setText(m_currentAccount->profileName());
+        ui->selectedAccountIconLabel->setIcon(m_currentAccount->getFace());
+        return;
+    }
+
     if(m_currentAccount->accountState() == AccountState::Expired)
     {
         ui->accountPageStack->setCurrentWidget(ui->expiredPage);
