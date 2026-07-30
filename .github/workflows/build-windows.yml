@@ -29,15 +29,16 @@ jobs:
           install: >
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-qt5
+            mingw-w64-x86_64-qt5-base
             mingw-w64-x86_64-qt5-tools
+            mingw-w64-x86_64-qt5-svg
             mingw-w64-x86_64-openssl
             mingw-w64-x86_64-zlib
             git
 
       - name: Configure
         run: |
-          cmake -G "MinGW Makefiles" -B build \
+          cmake -G "MSYS Makefiles" -B build \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX="$PWD/install"
 
