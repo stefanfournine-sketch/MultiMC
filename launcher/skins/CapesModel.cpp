@@ -7,7 +7,6 @@
 #include "CapesModel.h"
 #include "CapeCache.h"
 #include "Application.h"
-#include "minecraft/auth/AccountTask.h"
 
 #include <QMap>
 #include <QDebug>
@@ -33,18 +32,6 @@ void CapesModel::setAccount(MinecraftAccountPtr account)
         auto capeCache = APPLICATION->capeCache();
         m_capes.push_back(Skins::CapeEntry{"", tr("Nothing"), QImage(":/skins/textures/no_cape.png").scaled(64, 64, Qt::AspectRatioMode::KeepAspectRatio)});
         m_uuidIndex[""] = 0;
-        if(m_account)
-        {
-            for(auto& cape: m_account->accountData()->minecraftProfile.capes)
-            {
-                Skins::CapeEntry entry;
-                entry.alias = cape.alias;
-                entry.preview = capeCache->getCapeImage(cape.id).copy(1, 1, 10, 16).scaled(64, 64, Qt::AspectRatioMode::KeepAspectRatio);
-                entry.uuid = cape.id;
-                m_uuidIndex[cape.id] = m_capes.size();
-                m_capes.push_back(entry);
-            }
-        }
     }
     endResetModel();
 }
