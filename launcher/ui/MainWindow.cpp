@@ -1028,11 +1028,11 @@ void MainWindow::updateToolsMenu()
     QAction *normalLaunchOffline = launchOfflineMenu->addAction(tr("Launch Offline"));
     connect(normalLaunch, &QAction::triggered, [this]()
             {
-                APPLICATION->launch(m_selectedInstance, true);
+                APPLICATION->launch(m_selectedInstance);
             });
     connect(normalLaunchOffline, &QAction::triggered, [this]()
             {
-                APPLICATION->launch(m_selectedInstance, false);
+                APPLICATION->launch(m_selectedInstance);
             });
     QString profilersTitle = tr("Profilers");
     launchMenu->addSeparator()->setText(profilersTitle);
@@ -1054,11 +1054,11 @@ void MainWindow::updateToolsMenu()
         {
             connect(profilerAction, &QAction::triggered, [this, profiler]()
                     {
-                        APPLICATION->launch(m_selectedInstance, true, profiler.get());
+                        APPLICATION->launch(m_selectedInstance, profiler.get());
                     });
             connect(profilerOfflineAction, &QAction::triggered, [this, profiler]()
                     {
-                        APPLICATION->launch(m_selectedInstance, false, profiler.get());
+                        APPLICATION->launch(m_selectedInstance, profiler.get());
                     });
         }
     }
@@ -1889,7 +1889,7 @@ void MainWindow::on_actionLaunchInstanceOffline_triggered()
 {
     if (m_selectedInstance)
     {
-        APPLICATION->launch(m_selectedInstance, false);
+        APPLICATION->launch(m_selectedInstance);
     }
 }
 

@@ -202,47 +202,10 @@ set(MINECRAFT_SOURCES
     minecraft/auth/AccountList.h
     minecraft/auth/AccountTask.cpp
     minecraft/auth/AccountTask.h
-    minecraft/auth/AuthRequest.cpp
-    minecraft/auth/AuthRequest.h
     minecraft/auth/AuthSession.cpp
     minecraft/auth/AuthSession.h
-    minecraft/auth/AuthStep.cpp
-    minecraft/auth/AuthStep.h
     minecraft/auth/MinecraftAccount.cpp
     minecraft/auth/MinecraftAccount.h
-    minecraft/auth/Parsers.cpp
-    minecraft/auth/Parsers.h
-
-    minecraft/auth/flows/AuthFlow.cpp
-    minecraft/auth/flows/AuthFlow.h
-    minecraft/auth/flows/MSA.cpp
-    minecraft/auth/flows/MSA.h
-
-    # Auth steps
-    minecraft/auth/steps/EntitlementsStep.cpp
-    minecraft/auth/steps/EntitlementsStep.h
-    minecraft/auth/steps/GetSkinStep.cpp
-    minecraft/auth/steps/GetSkinStep.h
-    minecraft/auth/steps/LauncherLoginStep.cpp
-    minecraft/auth/steps/LauncherLoginStep.h
-    minecraft/auth/steps/MinecraftProfileStep.cpp
-    minecraft/auth/steps/MinecraftProfileStep.h
-    minecraft/auth/steps/MSAStep.cpp
-    minecraft/auth/steps/MSAStep.h
-    minecraft/auth/steps/XboxAuthorizationStep.cpp
-    minecraft/auth/steps/XboxAuthorizationStep.h
-    minecraft/auth/steps/XboxProfileStep.cpp
-    minecraft/auth/steps/XboxProfileStep.h
-    minecraft/auth/steps/XboxUserStep.cpp
-    minecraft/auth/steps/XboxUserStep.h
-
-    # API call steps
-    minecraft/auth/steps/SetSkinStep.cpp
-    minecraft/auth/steps/SetSkinStep.h
-    minecraft/auth/steps/SetCapeStep.cpp
-    minecraft/auth/steps/SetCapeStep.h
-    minecraft/auth/steps/MinecraftProfileCreateStep.cpp
-    minecraft/auth/steps/MinecraftProfileCreateStep.h
 
     minecraft/gameoptions/GameOptions.h
     minecraft/gameoptions/GameOptions.cpp
@@ -256,8 +219,6 @@ set(MINECRAFT_SOURCES
     minecraft/update/LibrariesTask.cpp
     minecraft/update/LibrariesTask.h
 
-    minecraft/launch/ClaimAccount.cpp
-    minecraft/launch/ClaimAccount.h
     minecraft/launch/CreateGameFolders.cpp
     minecraft/launch/CreateGameFolders.h
     minecraft/launch/ModMinecraftJar.cpp
@@ -759,8 +720,6 @@ SET(LAUNCHER_SOURCES
     ui/dialogs/NewInstanceDialog.h
     ui/dialogs/NotificationDialog.cpp
     ui/dialogs/NotificationDialog.h
-    ui/dialogs/OfflineNameDialog.cpp
-    ui/dialogs/OfflineNameDialog.h
     ui/pagedialog/PageDialog.cpp
     ui/pagedialog/PageDialog.h
     ui/dialogs/ProgressDialog.cpp

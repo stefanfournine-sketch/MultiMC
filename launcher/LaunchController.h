@@ -24,14 +24,6 @@ public:
         return m_instance;
     }
 
-    void setOnline(bool online) {
-        m_userWantsOnline = online;
-    }
-
-    void setOfflineName(const QString &offlineName) {
-        m_offlineName = offlineName;
-    }
-
     void setProfiler(BaseProfilerFactory *profiler) {
         m_profiler = profiler;
     }
@@ -69,8 +61,6 @@ private slots:
 
 private:
     BaseProfilerFactory *m_profiler = nullptr;
-    bool m_userWantsOnline = true;
-    QString m_offlineName;
     InstancePtr m_instance;
     QWidget * m_parentWidget = nullptr;
     InstanceWindow *m_console = nullptr;

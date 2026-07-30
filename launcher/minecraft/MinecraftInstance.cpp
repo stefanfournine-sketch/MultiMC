@@ -24,7 +24,6 @@
 #include "minecraft/launch/LauncherPartLaunch.h"
 #include "minecraft/launch/DirectJavaLaunch.h"
 #include "minecraft/launch/ModMinecraftJar.h"
-#include "minecraft/launch/ClaimAccount.h"
 #include "minecraft/launch/ReconstructAssets.h"
 #include "minecraft/launch/ScanModFolders.h"
 #include "minecraft/launch/VerifyJavaInstall.h"
@@ -914,18 +913,7 @@ shared_qobject_ptr<LaunchTask> MinecraftInstance::createLaunchTask(AuthSessionPt
         process->appendStep(step);
     }
 
-    // if we aren't in offline mode,.
-    if(session->status != AuthSession::PlayableOffline)
-    {
-        if(!session->demo) {
-            process->appendStep(new ClaimAccount(pptr, session));
-        }
-        process->appendStep(new Update(pptr, Net::Mode::Online));
-    }
-    else
-    {
-        process->appendStep(new Update(pptr, Net::Mode::Offline));
-    }
+    process->appendStep(new Update(pptr, Net::Mode::Offline));
 
     // if there are any jar mods
     {

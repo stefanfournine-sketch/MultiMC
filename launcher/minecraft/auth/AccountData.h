@@ -1,39 +1,11 @@
 #pragma once
 #include <QString>
 #include <QByteArray>
-#include <QVector>
-#include <katabasis/Bits.h>
 #include <QJsonObject>
-
-struct Skin {
-    QString id;
-    QString url;
-    QString variant;
-
-    QByteArray data;
-};
-
-struct Cape {
-    QString id;
-    QString url;
-    QString alias;
-
-    QByteArray data;
-};
-
-struct MinecraftEntitlement {
-    bool ownsMinecraft = false;
-    bool canPlayMinecraft = false;
-    Katabasis::Validity validity = Katabasis::Validity::None;
-};
 
 struct MinecraftProfile {
     QString id;
     QString name;
-    Skin skin;
-    QString currentCape;
-    QMap<QString, Cape> capes;
-    Katabasis::Validity validity = Katabasis::Validity::None;
 };
 
 enum class AccountState {
@@ -51,34 +23,16 @@ struct AccountData {
     QJsonObject saveState() const;
     bool resumeStateFromV3(QJsonObject data);
 
-    //! gamertag for MSA
-    QString gamerTag() const;
-
-    //! Yggdrasil access token, as passed to the game.
-    QString accessToken() const;
-
     QString profileId() const;
     QString profileName() const;
-
-    QString xid() const;
-
     QString lastError() const;
 
-    Katabasis::Token msaToken;
-    Katabasis::Token userToken;
-    Katabasis::Token xboxApiToken;
-    Katabasis::Token mojangservicesToken;
-
-    Katabasis::Token yggdrasilToken;
     MinecraftProfile minecraftProfile;
-    MinecraftEntitlement minecraftEntitlement;
-    Katabasis::Validity validity_ = Katabasis::Validity::None;
 
-    // "MSA" or "offline"
-    QString type = "MSA";
+    QString type = "offline";
 
     // runtime only information (not saved with the account)
     QString internalId;
     QString errorString;
-    AccountState accountState = AccountState::Unchecked;
+    AccountState accountState = AccountState::Offline;
 };

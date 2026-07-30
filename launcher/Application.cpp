@@ -294,10 +294,6 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
     m_serverToJoin = args["server"].toString();
     m_worldToJoin = args["world"].toString();
     m_profileToUse = args["profile"].toString();
-    if(args["offline"].toBool()) {
-        m_offline = true;
-        m_offlineName = args["name"].toString();
-    }
     m_liveCheck = args["alive"].toBool();
     m_zipToImport = args["import"].toUrl();
 
@@ -394,28 +390,8 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
             return;
         }
 
-        if(m_offline)
-        {
-            std::cerr << "--offline can only be used in combination with --launch!" << std::endl;
-            m_status = Application::Failed;
-            return;
-        }
 
-        if(!m_offlineName.isEmpty())
-        {
-            std::cerr << "--offlineName can only be used in combination with --launch and --offline!" << std::endl;
-            m_status = Application::Failed;
-            return;
-        }
     }
-    else {
-        // all the things invalid when trying to --launch
-        // online, and offline name is set
-        if(!m_offline && !m_offlineName.isEmpty()) {
-            std::cerr << "--offlineName can only be used in combination with --launch and --offline!" << std::endl;
-            m_status = Application::Failed;
-            return;
-        }
     }
 
 #if defined(Q_OS_MAC)
@@ -525,10 +501,6 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
                 if(!m_profileToUse.isEmpty())
                 {
                     launch.args["profile"] = m_profileToUse;
-                }
-                if(m_offline) {
-                    launch.args["offline_enabled"] = "true";
-                    launch.args["offline_name"] = m_offlineName;
                 }
                 m_peerInstance->sendMessage(launch.serialize(), timeout);
             }
@@ -906,7 +878,6 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
         qDebug() << "Loading accounts...";
         m_accounts->setListFilePath("accounts.json", true);
         m_accounts->loadList();
-        m_accounts->fillQueue();
         qDebug() << "<> Accounts loaded.";
     }
 
@@ -1037,8 +1008,6 @@ void Application::performMainStartupAction()
         {
             QuickPlayTargetPtr serverOrWorldToJoin = nullptr;
             MinecraftAccountPtr accountToUse = nullptr;
-            bool offline = m_offline;
-
             qDebug() << "<> Instance" << m_instanceIdToLaunch << "launching";
             if(!m_serverToJoin.isEmpty())
             {
@@ -1062,7 +1031,7 @@ void Application::performMainStartupAction()
                 qDebug() << "   Launching with account" << m_profileToUse;
             }
 
-            launch(inst, !offline, nullptr, serverOrWorldToJoin, accountToUse, m_offlineName);
+            launch(inst, nullptr, serverOrWorldToJoin, accountToUse);
             return;
         }
     }
@@ -1136,9 +1105,6 @@ void Application::messageReceived(const QByteArray& message)
         QString server = received.args["server"];
         QString world = received.args["world"];
         QString profile = received.args["profile"];
-        bool offline = received.args["offline_enabled"] == "true";
-        QString offlineName = received.args["offline_name"];
-
         InstancePtr instance;
         if(!id.isEmpty()) {
             instance = instances()->getInstanceById(id);
@@ -1170,11 +1136,9 @@ void Application::messageReceived(const QByteArray& message)
 
         launch(
             instance,
-            !offline,
             nullptr,
             quickPlayTarget,
-            accountObject,
-            offlineName
+            accountObject
         );
     }
     else
@@ -1253,11 +1217,9 @@ bool Application::openJsonEditor(const QString &filename)
 
 bool Application::launch(
         InstancePtr instance,
-        bool online,
         BaseProfilerFactory *profiler,
         QuickPlayTargetPtr quickPlayTarget,
-        MinecraftAccountPtr accountToUse,
-        const QString& offlineName
+        MinecraftAccountPtr accountToUse
 ) {
     if(m_updateRunning)
     {
@@ -1277,11 +1239,9 @@ bool Application::launch(
         auto & controller = extras.controller;
         controller.reset(new LaunchController());
         controller->setInstance(instance);
-        controller->setOnline(online);
         controller->setProfiler(profiler);
         controller->setQuickPlayTarget(quickPlayTarget);
         controller->setAccountToUse(accountToUse);
-        controller->setOfflineName(offlineName);
         if(window)
         {
             controller->setParentWidget(window);

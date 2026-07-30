@@ -156,11 +156,9 @@ signals:
 public slots:
     bool launch(
             InstancePtr instance,
-            bool online = true,
             BaseProfilerFactory *profiler = nullptr,
             QuickPlayTargetPtr quickPlayTarget = nullptr,
-            MinecraftAccountPtr accountToUse = nullptr,
-            const QString &offlineName = QString()
+            MinecraftAccountPtr accountToUse = nullptr
     );
     bool kill(InstancePtr instance);
 
@@ -242,8 +240,6 @@ public:
     QString m_serverToJoin;
     QString m_worldToJoin;
     QString m_profileToUse;
-    bool m_offline = false;
-    QString m_offlineName;
     bool m_liveCheck = false;
     QUrl m_zipToImport;
     std::unique_ptr<QFile> logFile;

@@ -74,7 +74,7 @@ private:
     bool isWorldSafe(QModelIndex index);
     bool worldSafetyNagQuestion();
     void mceditError();
-    void joinSelectedWorld(bool online);
+    void joinSelectedWorld();
 
 private:
     Ui::WorldListPage *ui;

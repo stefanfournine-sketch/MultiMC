@@ -426,7 +426,7 @@ void WorldListPage::on_actionRefresh_triggered()
     m_worlds->update();
 }
 
-void WorldListPage::joinSelectedWorld(bool online)
+void WorldListPage::joinSelectedWorld()
 {
     auto index = getSelectedWorld();
     if (!index.isValid())
@@ -438,17 +438,17 @@ void WorldListPage::joinSelectedWorld(bool online)
     auto world = (World *) worldVariant.value<void *>();
     auto name = world->folderName();
 
-    APPLICATION->launch(m_inst, online, nullptr, std::make_shared<QuickPlayTarget>(QuickPlayTarget::parseSingleplayer(name)));
+    APPLICATION->launch(m_inst, nullptr, std::make_shared<QuickPlayTarget>(QuickPlayTarget::parseSingleplayer(name)));
 }
 
 void WorldListPage::on_actionJoin_triggered()
 {
-    joinSelectedWorld(true);
+    joinSelectedWorld();
 }
 
 void WorldListPage::on_actionJoinOffline_triggered()
 {
-    joinSelectedWorld(false);
+    joinSelectedWorld();
 }
 
 #include "WorldListPage.moc"
