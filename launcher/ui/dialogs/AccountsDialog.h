@@ -113,6 +113,7 @@ private:
     void startLogin();
 
 private slots:
+    void onAddOfflineButtonClicked();
     void onGetFreshCodeButtonClicked(bool);
     void onQrButtonClicked(bool);
     void onCopyLinkButtonClicked(bool);

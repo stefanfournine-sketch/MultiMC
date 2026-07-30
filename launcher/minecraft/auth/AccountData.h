@@ -74,6 +74,9 @@ struct AccountData {
     MinecraftEntitlement minecraftEntitlement;
     Katabasis::Validity validity_ = Katabasis::Validity::None;
 
+    // "MSA" or "offline"
+    QString type = "MSA";
+
     // runtime only information (not saved with the account)
     QString internalId;
     QString errorString;

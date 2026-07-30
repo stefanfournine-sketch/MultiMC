@@ -482,10 +482,73 @@
               </item>
              </layout>
             </widget>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="setupProfilePage">
+            </item>
+            <item row="1" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+             <widget class="QFrame" name="offlineFrame">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="offlineLayout">
+               <item>
+                <widget class="QLabel" name="offlineLabel">
+                 <property name="text">
+                  <string>Offline Account</string>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="offlineDescription">
+                 <property name="text">
+                  <string>Create an offline account that works without a Microsoft login. Uses a local username.</string>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="offlineInputLayout">
+                 <item>
+                  <widget class="QLineEdit" name="offlineNameEdit">
+                   <property name="placeholderText">
+                    <string>Username</string>
+                   </property>
+                   <property name="maxLength">
+                    <number>16</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="addOfflineButton">
+                   <property name="text">
+                    <string>Add Offline Account</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="setupProfilePage">
           <layout class="QGridLayout" name="gridLayout_3">
            <property name="leftMargin">
             <number>0</number>

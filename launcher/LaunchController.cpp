@@ -131,7 +131,10 @@ void LaunchController::login() {
             case AccountState::Online: {
                 if(!m_session->wants_online) {
                     QString usedname;
-                    if(m_offlineName.isEmpty()) {
+                    if(m_accountToUse->accountState() == AccountState::Offline && m_accountToUse->hasProfile()) {
+                        // Use the stored offline account name directly
+                        usedname = m_accountToUse->profileName();
+                    } else if(m_offlineName.isEmpty()) {
                         // we ask the user for a player name
                         QString lastOfflinePlayerName = APPLICATION->settings()->get("LastOfflinePlayerName").toString();
                         usedname = lastOfflinePlayerName.isEmpty() ? m_session->player_name : lastOfflinePlayerName;

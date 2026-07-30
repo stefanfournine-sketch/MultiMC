@@ -245,6 +245,24 @@ bool AccountData::resumeStateFromV3(QJsonObject data) {
         return false;
     }
     auto typeS = typeV.toString();
+    if(typeS == "offline") {
+        type = "offline";
+        auto nameV = data.value("profileName");
+        auto idV = data.value("profileId");
+        if(!nameV.isString()) {
+            qWarning() << "Offline account: profileName is missing.";
+            return false;
+        }
+        minecraftProfile.name = nameV.toString();
+        minecraftProfile.id = idV.isString() ? idV.toString() : QString();
+        minecraftProfile.validity = Katabasis::Validity::Assumed;
+        minecraftEntitlement.ownsMinecraft = true;
+        minecraftEntitlement.canPlayMinecraft = true;
+        minecraftEntitlement.validity = Katabasis::Validity::Assumed;
+        validity_ = Katabasis::Validity::Assumed;
+        accountState = AccountState::Offline;
+        return true;
+    }
     if(typeS != "MSA") {
         qWarning() << "Failed to parse account data: type is not recognized.";
         return false;
@@ -271,6 +289,12 @@ bool AccountData::resumeStateFromV3(QJsonObject data) {
 
 QJsonObject AccountData::saveState() const {
     QJsonObject output;
+    if(type == "offline") {
+        output["type"] = "offline";
+        output["profileName"] = minecraftProfile.name;
+        output["profileId"] = minecraftProfile.id;
+        return output;
+    }
     output["type"] = "MSA";
     tokenToJSONV3(output, msaToken, "msa");
     tokenToJSONV3(output, userToken, "utoken");

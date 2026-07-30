@@ -71,6 +71,7 @@ public: /* construction */
     explicit MinecraftAccount(QObject *parent = 0);
 
     static MinecraftAccountPtr createBlankMSA();
+    static MinecraftAccountPtr createOffline(const QString& username);
 
     static MinecraftAccountPtr loadFromJsonV3(const QJsonObject &json);
 
@@ -125,7 +126,7 @@ public: /* queries */
     }
 
     QString typeString() const {
-        return "msa";
+        return data.type == "offline" ? "offline" : "msa";
     }
 
     QPixmap getFace() const;

@@ -18,6 +18,7 @@
 #include "MinecraftAccount.h"
 
 #include <QUuid>
+#include <QCryptographicHash>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QRegExp>
@@ -51,6 +52,31 @@ MinecraftAccountPtr MinecraftAccount::loadFromJsonV3(const QJsonObject& json) {
 MinecraftAccountPtr MinecraftAccount::createBlankMSA()
 {
     MinecraftAccountPtr account(new MinecraftAccount());
+    return account;
+}
+
+// Generate UUID v3 matching Java's UUID.nameUUIDFromBytes("OfflinePlayer:" + username)
+static QString offlineUUID(const QString& username)
+{
+    QByteArray data = QString("OfflinePlayer:" + username).toUtf8();
+    QByteArray hash = QCryptographicHash::hash(data, QCryptographicHash::Md5);
+    // Set version bits (UUID v3) and variant bits (RFC 4122)
+    hash[6] = (hash[6] & 0x0f) | 0x30;
+    hash[8] = (hash[8] & 0x3f) | 0x80;
+    // Format as UUID string with dashes
+    return QString::fromLatin1(hash.toHex().insert(8, '-').insert(13, '-').insert(18, '-').insert(23, '-'));
+}
+
+MinecraftAccountPtr MinecraftAccount::createOffline(const QString& username)
+{
+    MinecraftAccountPtr account(new MinecraftAccount());
+    account->data.type = "offline";
+    account->data.minecraftProfile.name = username;
+    account->data.minecraftProfile.id = offlineUUID(username);
+    account->data.minecraftEntitlement.ownsMinecraft = true;
+    account->data.minecraftEntitlement.canPlayMinecraft = true;
+    account->data.minecraftEntitlement.validity = Katabasis::Validity::Assumed;
+    account->data.accountState = AccountState::Offline;
     return account;
 }
 
@@ -152,6 +178,9 @@ shared_qobject_ptr<AccountTask> MinecraftAccount::loginMSA() {
 }
 
 shared_qobject_ptr<AccountTask> MinecraftAccount::refresh() {
+    if(data.type == "offline") {
+        return nullptr;
+    }
     if(m_currentTask) {
         return m_currentTask;
     }
@@ -247,6 +276,9 @@ bool MinecraftAccount::shouldRefresh() const {
      * Don't refresh broken accounts.
      * Refresh accounts that would expire in the next 12 hours (fresh token validity is 24 hours).
      */
+    if(data.type == "offline") {
+        return false;
+    }
     if(isInUse()) {
         return false;
     }

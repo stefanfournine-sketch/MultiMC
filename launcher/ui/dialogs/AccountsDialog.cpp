@@ -85,6 +85,8 @@ AccountsDialog::AccountsDialog(QWidget *parent, const QString& internalId) : QDi
     connect(ui->refreshButton_Setup, &QPushButton::clicked, this, &AccountsDialog::onRefreshButtonClicked);
     connect(ui->refreshButton_Demo, &QPushButton::clicked, this, &AccountsDialog::onRefreshButtonClicked);
 
+    connect(ui->addOfflineButton, &QPushButton::clicked, this, &AccountsDialog::onAddOfflineButtonClicked);
+
     connect(ui->getFreshCodeButton, &QPushButton::clicked, this, &AccountsDialog::onGetFreshCodeButtonClicked);
 
     QItemSelectionModel *selectionModel = ui->accountListView->selectionModel();
@@ -641,6 +643,28 @@ void AccountsDialog::onLoginTaskProgress(qint64 current, qint64 total)
 {
     ui->progressBar->setMaximum(total);
     ui->progressBar->setValue(current);
+}
+
+void AccountsDialog::onAddOfflineButtonClicked()
+{
+    QString name = ui->offlineNameEdit->text().trimmed();
+    if(name.isEmpty()) {
+        return;
+    }
+    // Validate username: 3-16 chars, alphanumeric and underscore
+    QRegExp valid("[a-zA-Z0-9_]{3,16}");
+    if(!valid.exactMatch(name)) {
+        QMessageBox::warning(this, tr("Invalid username"), tr("Username must be 3-16 characters and contain only letters, numbers, and underscores."));
+        return;
+    }
+    auto account = MinecraftAccount::createOffline(name);
+    QModelIndex idx = m_accounts->addAccount(account);
+    if(!m_accounts->defaultAccount()) {
+        m_accounts->setData(idx, Qt::Checked, Qt::CheckStateRole);
+    }
+    ui->offlineNameEdit->clear();
+    ui->accountListView->selectionModel()->select(idx,
+        QItemSelectionModel::Clear | QItemSelectionModel::Select | QItemSelectionModel::Rows | QItemSelectionModel::Current);
 }
 
 void AccountsDialog::changeEvent(QEvent* event)
