@@ -120,7 +120,6 @@ void Meta::BaseEntity::load(Net::Mode loadType)
     m_updateTask = new NetJob(QObject::tr("Download of meta file %1").arg(localFilename()), APPLICATION->network());
     auto url = this->url();
     auto entry = APPLICATION->metacache()->resolveEntry("meta", localFilename());
-    entry->setStale(true);
     auto dl = Net::Download::makeCached(url, entry);
     /*
      * The validator parses the file and loads it into the object.

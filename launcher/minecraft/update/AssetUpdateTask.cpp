@@ -31,7 +31,6 @@ void AssetUpdateTask::executeTask()
 
     auto metacache = APPLICATION->metacache();
     auto entry = metacache->resolveEntry("asset_indexes", localPath);
-    entry->setStale(true);
     auto hexSha1 = assets->sha1.toLatin1();
     qDebug() << "Asset index SHA1:" << hexSha1;
     auto dl = Net::Download::makeCached(indexUrl, entry);
