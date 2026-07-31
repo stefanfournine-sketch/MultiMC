@@ -34,6 +34,7 @@ jobs:
             mingw-w64-x86_64-qt5-svg
             mingw-w64-x86_64-openssl
             mingw-w64-x86_64-zlib
+            make
             git
 
       - name: Configure
