@@ -93,27 +93,6 @@
 
 #include "MMCTime.h"
 
-namespace {
-QString profileInUseFilter(const QString& profileName, const QString& accountName, bool used)
-{
-    QString displayString;
-    if(profileName.size() == 0) {
-        displayString = QObject::tr("No profile (%1)").arg(accountName);
-    }
-    else {
-        displayString = profileName;
-    }
-    if(used)
-    {
-        return QObject::tr("%1 (in use)").arg(displayString);
-    }
-    else
-    {
-        return displayString;
-    }
-}
-}
-
 // WHY: to hold the pre-translation strings together with the T pointer, so it can be retranslated without a lot of ugly code
 template <typename T>
 class Translated
@@ -867,7 +846,10 @@ void MainWindow::retranslateUi()
     auto accounts = APPLICATION->accounts();
     MinecraftAccountPtr defaultAccount = accounts->defaultAccount();
     if(defaultAccount) {
-        auto profileLabel = profileInUseFilter(defaultAccount->profileName(), defaultAccount->gamerTag(), defaultAccount->isInUse());
+        QString profileLabel = defaultAccount->profileName();
+        if(defaultAccount->isInUse()) {
+            profileLabel = QObject::tr("%1 (in use)").arg(profileLabel);
+        }
         accountMenuButton->setText(profileLabel);
     }
     else {
@@ -1079,7 +1061,10 @@ void MainWindow::repopulateAccountsMenu()
         // this can be called before accountMenuButton exists
         if (accountMenuButton)
         {
-            auto profileLabel = profileInUseFilter(defaultAccount->profileName(), defaultAccount->gamerTag(), defaultAccount->isInUse());
+            auto profileLabel = defaultAccount->profileName();
+            if(defaultAccount->isInUse()) {
+                profileLabel = QObject::tr("%1 (in use)").arg(profileLabel);
+            }
             accountMenuButton->setText(profileLabel);
         }
     }
@@ -1102,7 +1087,10 @@ void MainWindow::repopulateAccountsMenu()
             }
             auto account = entry.account;
 
-            auto profileLabel = profileInUseFilter(account->profileName(), account->gamerTag(), account->isInUse());
+            auto profileLabel = account->profileName();
+            if(account->isInUse()) {
+                profileLabel = QObject::tr("%1 (in use)").arg(profileLabel);
+            }
             QAction *action = new QAction(profileLabel, this);
             action->setData(i);
             action->setCheckable(true);
@@ -1111,13 +1099,7 @@ void MainWindow::repopulateAccountsMenu()
                 action->setChecked(true);
             }
 
-            auto face = account->getFace();
-            if(!face.isNull()) {
-                action->setIcon(face);
-            }
-            else {
-                action->setIcon(APPLICATION->getThemedIcon("noaccount"));
-            }
+            action->setIcon(APPLICATION->getThemedIcon("noaccount"));
             accountMenu->addAction(action);
             connect(action, SIGNAL(triggered(bool)), SLOT(changeActiveAccount()));
         }
@@ -1184,15 +1166,12 @@ void MainWindow::defaultAccountChanged()
         return;
     }
 
-    auto profileLabel = profileInUseFilter(account->profileName(), account->gamerTag(), account->isInUse());
+    auto profileLabel = account->profileName();
+    if(account->isInUse()) {
+        profileLabel = QObject::tr("%1 (in use)").arg(profileLabel);
+    }
     accountMenuButton->setText(profileLabel);
-    auto face = account->getFace();
-    if(face.isNull()) {
-        accountMenuButton->setIcon(APPLICATION->getThemedIcon("noaccount"));
-    }
-    else {
-        accountMenuButton->setIcon(face);
-    }
+    accountMenuButton->setIcon(APPLICATION->getThemedIcon("noaccount"));
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *ev)
