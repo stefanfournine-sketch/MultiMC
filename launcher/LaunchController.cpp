@@ -7,6 +7,7 @@
 #include "ui/InstanceWindow.h"
 #include "ui/dialogs/CustomMessageBox.h"
 #include "ui/dialogs/ProfileSelectDialog.h"
+#include "ui/dialogs/ProgressDialog.h"
 
 #include <QStringList>
 #include <QHostInfo>
